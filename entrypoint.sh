@@ -23,13 +23,14 @@ pelican ${PELICAN_CONTENT_FOLDER:=content} -o output -s ${PELICAN_CONFIG_FILE:=p
 
 echo 'Publishing to GitHub Pages 📤 '
 pushd output
+git config --global --add safe.directory /github/workspace/output
+git config --global init.defaultBranch "main"
 git init
 git remote add deploy "$remote_repo"
 git checkout $remote_branch || git checkout --orphan $remote_branch
 git config user.name "${GITHUB_ACTOR}"
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-git config --add safe.directory /github/workspace/output
-git config init.defaultBranch "main"
+
 if [ "$GH_PAGES_CNAME" != "none" ]
 then
     echo "$GH_PAGES_CNAME" > CNAME
